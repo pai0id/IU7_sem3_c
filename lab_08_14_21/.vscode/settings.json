@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "check_func.h": "c",
+        "array": "c",
+        "string": "c",
+        "string_view": "c"
+    }
+}

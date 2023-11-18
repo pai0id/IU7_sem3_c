@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "err.h": "c",
+        "stddef.h": "c",
+        "film.h": "c",
+        "check.h": "c",
+        "typeinfo": "c",
+        "types.h": "c"
+    }
+}
