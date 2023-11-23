@@ -18,15 +18,12 @@ START_TEST(test_matrix_mult_an3_am3_bn3_bm3)
     double *c[N_MAX] = {pc[0], pc[1], pc[2]};
 
     double **res;
+    size_t res_n, res_m;
 
-    int rc = matrix_mult(a, an, am, b, bn, bm, &res, &cn, &cm);
+    int rc = matrix_mult(a, an, am, b, bn, bm, &res, &res_n, &res_m);
 
     ck_assert_int_eq(rc, OK);
-    ck_assert_int_eq(cn, 3);
-    ck_assert_int_eq(cm, 3);
-    for (size_t i = 0; i < cn; ++i)
-        for (size_t j = 0; j < cm; ++j)
-            ck_assert_double_eq_tol(res[i][j], c[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(res, res_n, res_m, c, cn, cm), ERR_OK);
     
     matrix_free(res, cn);
 }
@@ -46,15 +43,12 @@ START_TEST(test_matrix_mult_an1_am3_bn3_bm1)
     double *c[N_MAX] = {pc[0]};
 
     double **res;
+    size_t res_n, res_m;
 
-    int rc = matrix_mult(a, an, am, b, bn, bm, &res, &cn, &cm);
+    int rc = matrix_mult(a, an, am, b, bn, bm, &res, &res_n, &res_m);
 
     ck_assert_int_eq(rc, OK);
-    ck_assert_int_eq(cn, 1);
-    ck_assert_int_eq(cm, 1);
-    for (size_t i = 0; i < cn; ++i)
-        for (size_t j = 0; j < cm; ++j)
-            ck_assert_double_eq_tol(res[i][j], c[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(res, res_n, res_m, c, cn, cm), ERR_OK);
     
     matrix_free(res, cn);
 }
@@ -63,7 +57,7 @@ END_TEST
 /// Умножение матриц ошибка размера
 START_TEST(test_matrix_mult_err_size)
 {
-    size_t an = 1, am = 2, bn = 3, bm = 1, cn, cm;
+    size_t an = 1, am = 2, bn = 3, bm = 1;
     double pa[N_MAX][M_MAX] = {{1, 8}};
     double *a[N_MAX] = {pa[0]};
 
@@ -71,8 +65,9 @@ START_TEST(test_matrix_mult_err_size)
     double *b[N_MAX] = {pb[0], pb[1], pb[2]};
 
     double **res;
+    size_t res_n, res_m;
 
-    int rc = matrix_mult(a, an, am, b, bn, bm, &res, &cn, &cm);
+    int rc = matrix_mult(a, an, am, b, bn, bm, &res, &res_n, &res_m);
 
     ck_assert_int_eq(rc, ERR_RANGE);
 }
@@ -113,15 +108,12 @@ START_TEST(test_matrix_add_an3_am3_bn3_bm3)
     double *c[N_MAX] = {pc[0], pc[1], pc[2]};
     
     double **res;
+    size_t res_n, res_m;
 
-    int rc = matrix_add(a, an, am, b, bn, bm, &res, &cn, &cm);
+    int rc = matrix_add(a, an, am, b, bn, bm, &res, &res_n, &res_m);
 
     ck_assert_int_eq(rc, OK);
-    ck_assert_int_eq(cn, 3);
-    ck_assert_int_eq(cm, 3);
-    for (size_t i = 0; i < cn; ++i)
-        for (size_t j = 0; j < cm; ++j)
-            ck_assert_double_eq_tol(res[i][j], c[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(res, res_n, res_m, c, cn, cm), ERR_OK);
     
     matrix_free(res, cn);
 }
@@ -141,15 +133,12 @@ START_TEST(test_matrix_add_an1_am3_bn1_bm3)
     double *c[N_MAX] = {pc[0]};
 
     double **res;
+    size_t res_n, res_m;
 
-    int rc = matrix_add(a, an, am, b, bn, bm, &res, &cn, &cm);
+    int rc = matrix_add(a, an, am, b, bn, bm, &res, &res_n, &res_m);
 
     ck_assert_int_eq(rc, OK);
-    ck_assert_int_eq(cn, 1);
-    ck_assert_int_eq(cm, 3);
-    for (size_t i = 0; i < cn; ++i)
-        for (size_t j = 0; j < cm; ++j)
-            ck_assert_double_eq_tol(res[i][j], c[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(res, res_n, res_m, c, cn, cm), ERR_OK);
     
     matrix_free(res, cn);
 }
@@ -158,15 +147,16 @@ END_TEST
 /// Сложение матриц ошибка размера
 START_TEST(test_matrix_add_err_size)
 {
-    size_t an = 1, am = 2, bn = 3, bm = 1, cn, cm;
+    size_t an = 1, am = 2, bn = 3, bm = 1;
     double pa[N_MAX][M_MAX] = {{1, 8}};
     double *a[N_MAX] = {pa[0]};
 
     double pb[N_MAX][M_MAX] = {{1}, {2}, {3}};
     double *b[N_MAX] = {pb[0], pb[1], pb[2]};
     double **res;
+    size_t res_n, res_m;
 
-    int rc = matrix_add(a, an, am, b, bn, bm, &res, &cn, &cm);
+    int rc = matrix_add(a, an, am, b, bn, bm, &res, &res_n, &res_m);
 
     ck_assert_int_eq(rc, ERR_RANGE);
 }
@@ -206,8 +196,7 @@ START_TEST(test_solve_eq_good)
     int rc = solve_eq(mtr, n, f);
     
     ck_assert_int_eq(rc, OK);
-    for (size_t i = 0; i < n; ++i)
-        ck_assert_double_eq_tol(f[i], exp[i], EPS);
+    ck_assert_int_eq(double_arr_eq(f, n, exp, n), ERR_OK);
 }
 END_TEST
 
@@ -257,9 +246,7 @@ START_TEST(test_matrix_transpose)
     double *exp[N_MAX] = {pexp[0], pexp[1], pexp[2]};
 
     matrix_transpose(mtr, n);
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < n; ++j)
-            ck_assert_double_eq_tol(mtr[i][j], exp[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(mtr, n, n, exp, n, n), ERR_OK);
 }
 END_TEST
 
@@ -278,28 +265,69 @@ Suite* matrix_transpose_suite(void)
     return s;
 }
 
-/// Обратная матрица невырожденной матрицы
+/// Обратная матрица невырожденной матрицы без нулей на диагонали
 START_TEST(test_matrix_calc_rev_good)
+{
+    size_t n = 3, res_n, res_m;
+    double pmtr[N_MAX][M_MAX] = {{4, 8, 2}, {2, 2, 6}, {4, 4, 8}};
+    double *mtr[N_MAX] = {pmtr[0], pmtr[1], pmtr[2]};
+
+    // double pexp[N_MAX][M_MAX] = {{-0.125, -0.875, 0.6875}, {0.125, -0.125, 0.0625}, {0, 0.5, -0.25}};
+    // double *exp[N_MAX] = {pexp[0], pexp[1], pexp[2]};
+
+    double **ed_mtr = matrix_allocate(n, n);
+    ck_assert_ptr_nonnull(ed_mtr);
+    matrix_fill_d_ones(ed_mtr, n, n);
+
+    double **res;
+
+    int rc = matrix_calc_rev(mtr, n, n, &res, &res_n, &res_m);
+    ck_assert_int_eq(rc, OK);
+
+    double **test;
+    size_t test_n, test_m;
+
+    rc = matrix_mult(res, res_n, res_m, mtr, n, n, &test, &test_n, &test_m);
+    ck_assert_int_eq(rc, OK);
+
+    ck_assert_int_eq(double_mtr_eq(test, test_n, test_m, ed_mtr, n, n), ERR_OK);
+    
+    matrix_free(res, res_n);
+    matrix_free(ed_mtr, n);
+    matrix_free(test, test_n);
+}
+END_TEST
+
+/// Обратная матрица невырожденной матрицы с нулями на диагонали
+START_TEST(test_matrix_calc_rev_good_w_nulls)
 {
     size_t n = 3, res_n, res_m;
     double pmtr[N_MAX][M_MAX] = {{0, 8, 2}, {2, 2, 6}, {4, 4, 8}};
     double *mtr[N_MAX] = {pmtr[0], pmtr[1], pmtr[2]};
 
-    double pexp[N_MAX][M_MAX] = {{-0.125, -0.875, 0.6875}, {0.125, -0.125, 0.0625}, {0, 0.5, -0.25}};
-    double *exp[N_MAX] = {pexp[0], pexp[1], pexp[2]};
+    // double pexp[N_MAX][M_MAX] = {{-0.125, -0.875, 0.6875}, {0.125, -0.125, 0.0625}, {0, 0.5, -0.25}};
+    // double *exp[N_MAX] = {pexp[0], pexp[1], pexp[2]};
+
+    double **ed_mtr = matrix_allocate(n, n);
+    ck_assert_ptr_nonnull(ed_mtr);
+    matrix_fill_d_ones(ed_mtr, n, n);
 
     double **res;
 
     int rc = matrix_calc_rev(mtr, n, n, &res, &res_n, &res_m);
-
     ck_assert_int_eq(rc, OK);
-    ck_assert_int_eq(res_n, 3);
-    ck_assert_int_eq(res_m, 3);
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < n; ++j)
-            ck_assert_double_eq_tol(res[i][j], exp[i][j], EPS);
+
+    double **test;
+    size_t test_n, test_m;
+
+    rc = matrix_mult(res, res_n, res_m, mtr, n, n, &test, &test_n, &test_m);
+    ck_assert_int_eq(rc, OK);
+
+    ck_assert_int_eq(double_mtr_eq(test, test_n, test_m, ed_mtr, n, n), ERR_OK);
     
     matrix_free(res, res_n);
+    matrix_free(ed_mtr, n);
+    matrix_free(test, test_n);
 }
 END_TEST
 
@@ -342,6 +370,7 @@ Suite* matrix_calc_rev_suite(void)
     
     tc_pos = tcase_create("Pos");
     tcase_add_test(tc_pos, test_matrix_calc_rev_good);
+    tcase_add_test(tc_pos, test_matrix_calc_rev_good_w_nulls);
 
     suite_add_tcase(s, tc_pos);
 

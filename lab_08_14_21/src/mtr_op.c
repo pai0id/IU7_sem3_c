@@ -48,7 +48,7 @@ int solve_eq(double **mtr, size_t n, double *f)
 {
     double divisor, factor, *tmp, tmp_el;
 
-    // Начинаю итерацию по каждой строке матрицы
+    // Преобразование матрицы в матрицу треугольного вида
     for (size_t i = 0; i < n; ++i)
     {
         // Запоминаю значение диагонального элемента текущей строки
@@ -56,45 +56,49 @@ int solve_eq(double **mtr, size_t n, double *f)
         // Проверяю, не равен ли диагональный элемент нулю
         if (fabs(divisor) < EPS)
         {
-            int found = 0;
-            // Если диагональный элемент нулевой, ищу другую строку с ненулевым элементом
+            double found = 0;
+            size_t id;
+            // Если диагональный элемент нулевой, ищу другую строку с максимальным по модулю ненулевым элементом
             for (size_t k = i + 1; k < n; ++k)
             {
-                if (fabs(mtr[k][i]) >= EPS)
+                if (fabs(mtr[k][i]) - found >= EPS)
                 {
-                    // Меняю строки местами в матрице и в векторе правой части
-                    tmp = mtr[k];
-                    mtr[k] = mtr[i];
-                    mtr[i] = tmp;
-                    tmp_el = f[k];
-                    f[k] = f[i];
-                    f[i] = tmp_el;
-                    found = 1;
-                    break;
+                    found = fabs(mtr[k][i]);
+                    id = k;
                 }
             }
             // Если не найдено ненулевого элемента, сообщаю, что система нерешима
-            if (!found)
+            if (found <= EPS)
                 return ERR_UNSOLVABLE;
             else
+            {
+                // Меняю строки местами в матрице и в векторе правой части
+                tmp = mtr[id];
+                mtr[id] = mtr[i];
+                mtr[i] = tmp;
+                tmp_el = f[id];
+                f[id] = f[i];
+                f[i] = tmp_el;
                 divisor = mtr[i][i];
+            }
         }
         // Делю элементы строки и соответствующий элемент вектора правой части на диагональный элемент
         f[i] /= divisor;
         for (size_t j = 0; j < n; ++j)
             mtr[i][j] /= divisor;
         // Привожу остальные строки к ступенчатому виду
-        for (size_t k = 0; k < n; ++k)
+        for (size_t k = i + 1; k < n; ++k)
         {
-            if (k != i)
-            {
-                factor = mtr[k][i];
-                f[k] -= factor * f[i];
-                for (size_t j = 0; j < n; ++j)
-                    mtr[k][j] -= factor * mtr[i][j];
-            }
+            factor = mtr[k][i];
+            f[k] -= factor * f[i];
+            for (size_t j = 0; j < n; ++j)
+                mtr[k][j] -= factor * mtr[i][j];
         }
     }
+    // Обратный ход
+    for (int i = n - 1; i >= 0; --i)
+        for (size_t j = n - 1; j != (size_t)i; --j)
+            f[i] -= mtr[i][j] * f[j];
     return OK;
 }
 

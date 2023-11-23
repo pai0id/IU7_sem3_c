@@ -1,0 +1,12 @@
+*.exe
+*.out
+*.o
+*.pch
+*.gch
+tmp
+*.gcov
+*.gcda
+*.gcno
+*test_all.sh
+clean_all.sh
+.vscode

@@ -10,13 +10,12 @@ START_TEST(test_matrix_fill_null_neq3_meq3)
 {
     size_t n = 3, m = 3;
     double exp[N_MAX][M_MAX] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
+    double *pexp[N_MAX] = {exp[0], exp[1], exp[2]};
 
     double **data = matrix_allocate(n, m);
     matrix_fill_null(data, n, m);
 
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < m; ++j)
-            ck_assert_double_eq_tol(data[i][j], exp[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(data, n, m, pexp, n, m), ERR_OK);
     
     matrix_free(data, n);
 }
@@ -27,13 +26,12 @@ START_TEST(test_matrix_fill_null_neq1_meq3)
 {
     size_t n = 1, m = 3;
     double exp[N_MAX][M_MAX] = {{0, 0, 0}};
+    double *pexp[N_MAX] = {exp[0]};
     
     double **data = matrix_allocate(n, m);
     matrix_fill_null(data, n, m);
 
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < m; ++j)
-            ck_assert_double_eq_tol(data[i][j], exp[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(data, n, m, pexp, n, m), ERR_OK);
     
     matrix_free(data, n);
 }
@@ -44,13 +42,12 @@ START_TEST(test_matrix_fill_null_neq3_meq1)
 {
     size_t n = 3, m = 1;
     double exp[N_MAX][M_MAX] = {{0}, {0}, {0}};
+    double *pexp[N_MAX] = {exp[0], exp[1], exp[2]};
     
     double **data = matrix_allocate(n, m);
     matrix_fill_null(data, n, m);
 
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < m; ++j)
-            ck_assert_double_eq_tol(data[i][j], exp[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(data, n, m, pexp, n, m), ERR_OK);
     
     matrix_free(data, n);
     
@@ -79,13 +76,12 @@ START_TEST(test_matrix_fill_d_ones_neq3_meq3)
 {
     size_t n = 3, m = 3;
     double exp[N_MAX][M_MAX] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
+    double *pexp[N_MAX] = {exp[0], exp[1], exp[2]};
     
     double **data = matrix_allocate(n, m);
     matrix_fill_d_ones(data, n, m);
 
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < m; ++j)
-            ck_assert_double_eq_tol(data[i][j], exp[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(data, n, m, pexp, n, m), ERR_OK);
     
     matrix_free(data, n);
 }
@@ -96,13 +92,12 @@ START_TEST(test_matrix_fill_d_ones_neq1_meq3)
 {
     size_t n = 1, m = 3;
     double exp[N_MAX][M_MAX] = {{1, 0, 0}};
+    double *pexp[N_MAX] = {exp[0]};
     
     double **data = matrix_allocate(n, m);
     matrix_fill_d_ones(data, n, m);
 
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < m; ++j)
-            ck_assert_double_eq_tol(data[i][j], exp[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(data, n, m, pexp, n, m), ERR_OK);
     
     matrix_free(data, n);
 }
@@ -113,13 +108,12 @@ START_TEST(test_matrix_fill_d_ones_neq3_meq1)
 {
     size_t n = 3, m = 1;
     double exp[N_MAX][M_MAX] = {{1}, {0}, {0}};
+    double *pexp[N_MAX] = {exp[0], exp[1], exp[2]};
     
     double **data = matrix_allocate(n, m);
     matrix_fill_d_ones(data, n, m);
 
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < m; ++j)
-            ck_assert_double_eq_tol(data[i][j], exp[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(data, n, m, pexp, n, m), ERR_OK);
     
     matrix_free(data, n);
 }
@@ -152,10 +146,8 @@ START_TEST(test_matrix_copy_neq3_meq3)
     double **data = matrix_allocate(n, m);
     matrix_copy(exp, n, m, data);
 
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < m; ++j)
-            ck_assert_double_eq_tol(data[i][j], exp[i][j], EPS);
-    
+    ck_assert_int_eq(double_mtr_eq(data, n, m, exp, n, m), ERR_OK);
+
     matrix_free(data, n);
 }
 END_TEST
@@ -170,9 +162,7 @@ START_TEST(test_matrix_copy_neq1_meq3)
     double **data = matrix_allocate(n, m);
     matrix_copy(exp, n, m, data);
 
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < m; ++j)
-            ck_assert_double_eq_tol(data[i][j], exp[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(data, n, m, exp, n, m), ERR_OK);
     
     matrix_free(data, n);
 }
@@ -188,9 +178,7 @@ START_TEST(test_matrix_copy_neq3_meq1)
     double **data = matrix_allocate(n, m);
     matrix_copy(exp, n, m, data);
 
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < m; ++j)
-            ck_assert_double_eq_tol(data[i][j], exp[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(data, n, m, exp, n, m), ERR_OK);
     
     matrix_free(data, n);
     
@@ -234,9 +222,7 @@ START_TEST(test_matrix_read_coord_no_el)
     fclose(f);
 
     ck_assert_int_eq(rc, OK);
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < m; ++j)
-            ck_assert_double_eq_tol(data[i][j], exp[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(data, n, m, exp, n, m), ERR_OK);
     
     matrix_free(data, n);
     
@@ -262,9 +248,7 @@ START_TEST(test_matrix_read_coord_few_el)
     fclose(f);
 
     ck_assert_int_eq(rc, OK);
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < m; ++j)
-            ck_assert_double_eq_tol(data[i][j], exp[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(data, n, m, exp, n, m), ERR_OK);
     
     matrix_free(data, n);
     
@@ -291,9 +275,7 @@ START_TEST(test_matrix_read_coord_all_el)
     fclose(f);
 
     ck_assert_int_eq(rc, OK);
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < m; ++j)
-            ck_assert_double_eq_tol(data[i][j], exp[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(data, n, m, exp, n, m), ERR_OK);
     
     matrix_free(data, n);
     
@@ -321,9 +303,7 @@ START_TEST(test_matrix_read_coord_extra_line)
     fclose(f);
 
     ck_assert_int_eq(rc, ERR_IO);
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < m; ++j)
-            ck_assert_double_eq_tol(data[i][j], exp[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(data, n, m, exp, n, m), ERR_OK);
     
     matrix_free(data, n);
     
@@ -351,9 +331,7 @@ START_TEST(test_matrix_read_coord_wrong_coord)
     fclose(f);
 
     ck_assert_int_eq(rc, ERR_RANGE);
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < m; ++j)
-            ck_assert_double_eq_tol(data[i][j], exp[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(data, n, m, exp, n, m), ERR_OK);
     
     matrix_free(data, n);
     
@@ -397,13 +375,12 @@ START_TEST(test_matrix_create_no_el)
     f = fopen("./out/tmp", "r");
     
     double **data;
-    int rc = matrix_create(f, &data, &n, &m);
+    size_t new_n, new_m;
+    int rc = matrix_create(f, &data, &new_n, &new_m);
     fclose(f);
 
     ck_assert_int_eq(rc, OK);
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < m; ++j)
-            ck_assert_double_eq_tol(data[i][j], exp[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(data, new_n, new_m, exp, n, m), ERR_OK);
     
     matrix_free(data, n);
     
@@ -423,13 +400,12 @@ START_TEST(test_matrix_create_few_el)
     f = fopen("./out/tmp", "r");
 
     double **data;
-    int rc = matrix_create(f, &data, &n, &m);
+    size_t new_n, new_m;
+    int rc = matrix_create(f, &data, &new_n, &new_m);
     fclose(f);
 
     ck_assert_int_eq(rc, OK);
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < m; ++j)
-            ck_assert_double_eq_tol(data[i][j], exp[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(data, new_n, new_m, exp, n, m), ERR_OK);
     
     matrix_free(data, n);
     
@@ -449,13 +425,12 @@ START_TEST(test_matrix_create_all_el)
     f = fopen("./out/tmp", "r");
 
     double **data;
-    int rc = matrix_create(f, &data, &n, &m);
+    size_t new_n, new_m;
+    int rc = matrix_create(f, &data, &new_n, &new_m);
     fclose(f);
 
     ck_assert_int_eq(rc, OK);
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < m; ++j)
-            ck_assert_double_eq_tol(data[i][j], exp[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(data, new_n, new_m, exp, n, m), ERR_OK);
     
     matrix_free(data, n);
     
@@ -549,9 +524,7 @@ START_TEST(test_matrix_print_simple_neq3_meq3)
     int rc = matrix_read_simple(f, data, &tmp_n, &tmp_m);
 
     ck_assert_int_eq(rc, OK);
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < m; ++j)
-            ck_assert_double_eq_tol(data[i][j], exp[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(data, tmp_n, tmp_m, exp, n, m), ERR_OK);
     
     
     matrix_free(data, n);
@@ -576,9 +549,7 @@ START_TEST(test_matrix_print_simple_neq1_meq1)
     int rc = matrix_read_simple(f, data, &tmp_n, &tmp_m);
 
     ck_assert_int_eq(rc, OK);
-    for (size_t i = 0; i < n; ++i)
-        for (size_t j = 0; j < m; ++j)
-            ck_assert_double_eq_tol(data[i][j], exp[i][j], EPS);
+    ck_assert_int_eq(double_mtr_eq(data, tmp_n, tmp_m, exp, n, m), ERR_OK);
     
     
     matrix_free(data, n);
