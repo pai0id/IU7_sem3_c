@@ -153,6 +153,53 @@ Suite* count_above_avr_suite(void)
     return s;
 }
 
+// Тестирование функции fill_above_avr с всеми элементами выше среднего
+START_TEST(test_fill_above_avr_all_above)
+{
+    const int src[] = {6, 7, 8, 9};
+    int res[] ={6, 7, 8, 9};
+    int result[10];
+    double avr = 5.0;
+
+    fill_above_avr(src, src + 4, avr, result);
+
+    for (size_t i = 0; i < sizeof(res)/sizeof(res[0]); ++i)
+        ck_assert_int_eq(res[i], result[i]);
+}
+END_TEST
+
+// Тестирование функции fill_above_avr с одним элементом выше среднего
+START_TEST(test_fill_above_avr_one_above)
+{
+    const int src[] = {6, 7, 8, 10};
+    int res[] ={10};
+    int result[10];
+    double avr = 9.0;
+
+    fill_above_avr(src, src + 4, avr, result);
+
+    for (size_t i = 0; i < sizeof(res)/sizeof(res[0]); ++i)
+        ck_assert_int_eq(res[i], result[i]);
+}
+END_TEST
+
+Suite *fill_above_avr_suite(void)
+{
+    Suite *s;
+    TCase *tc;
+
+    s = suite_create("fill_above_avr");
+
+    tc = tcase_create("tests");
+
+    tcase_add_test(tc, test_fill_above_avr_all_above);
+    tcase_add_test(tc, test_fill_above_avr_one_above);
+
+    suite_add_tcase(s, tc);
+
+    return s;
+}
+
 /// Тест копирования элементов больше среднего для пустого массива
 START_TEST(test_copy_above_avr_empty_array)
 {

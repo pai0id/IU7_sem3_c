@@ -33,6 +33,15 @@ int count_above_avr(const int *pb_src, const int *pe_src, double avr, int *count
     return OK;
 }
 
+void fill_above_avr(const int *pb_src, const int *pe_src, double avr, int *write)
+{
+    for (const int *read = pb_src; read < pe_src; ++read)
+    {
+        if (*read > avr)
+            *write++ = *read;
+    }
+}
+
 int copy_above_avr(const int *pb_src, const int *pe_src, double avr, int **pb_dst, int **pe_dst)
 {
     int count;
@@ -45,13 +54,9 @@ int copy_above_avr(const int *pb_src, const int *pe_src, double avr, int **pb_ds
         return ERR_MEM;
 
     int *write = *pb_dst;
-    for (const int *read = pb_src; read < pe_src; ++read)
-    {
-        if (*read > avr)
-            *write++ = *read;
-    }
+    fill_above_avr(pb_src, pe_src, avr, write);
 
-    *pe_dst = write;
+    *pe_dst = write + count;
     return OK;
 }
 

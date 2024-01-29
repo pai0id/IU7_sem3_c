@@ -13,12 +13,15 @@ int cnt_elements(FILE *f, int *cnt)
     return OK;
 }
 
-void read_arr(FILE *f, int **pb, int **pe)
+int read_arr(FILE *f, int **pb, int **pe)
 {
     int *write = *pb, curr;
     while (fscanf(f, "%d", &curr) == 1)
         *write++ = curr;
+    if (!feof(f))
+        return ERR_IO;
     *pe = write;
+    return OK;
 }
 
 int get_arr(FILE *f, int **pb, int **pe)

@@ -28,8 +28,11 @@ int cnt_elements(FILE *f, int *cnt);
  * \param f [in, out] - указатель на файл, из которого происходит чтение
  * \param pb [out] - указатель на указатель начала массива
  * \param pe [out] - указатель на указатель конца массива
+ * \return Код ошибки:
+ *         - OK, если массив успешно считан
+ *         - ERR_IO, если произошла ошибка ввода-вывода
  */
-void read_arr(FILE *f, int **pb, int **pe);
+int read_arr(FILE *f, int **pb, int **pe);
 
 /**
  * \brief Чтение массива целых чисел из файла.

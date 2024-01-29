@@ -33,6 +33,19 @@ int calculate_avr(const int *pb_src, const int *pe_src, double *avr);
 int count_above_avr(const int *pb_src, const int *pe_src, double avr, int *count);
 
 /**
+ * \brief Заполнение массива элементами, превышающими среднее арифметическое.
+ *
+ * Функция проходит по исходному массиву, начиная с pb_src и заканчивая pe_src, и копирует в целевой массив 
+ * те элементы, которые превышают заданное среднее арифметическое (avr).
+ *
+ * \param pb_src [in] - указатель на начало исходного массива
+ * \param pe_src [in] - указатель на конец исходного массива
+ * \param avr [in] - среднее арифметическое значение
+ * \param write [out] - указатель на начало целевого массива
+ */
+void fill_above_avr(const int *pb_src, const int *pe_src, double avr, int *write);
+
+/**
  * \brief Копирование элементов, превышающих среднее арифметическое, в новый массив.
  *
  * \param pb_src [in] - указатель на начало исходного массива

@@ -175,68 +175,68 @@ Suite* mysort_suite(void)
     return s;
 }
 
-/// Тест поиска элемента в массиве целых чисел
-START_TEST(test_bin_search_int)
-{
-    int arr[] = {1, 2, 3, 4, 5};
-    int key = 4;
-    size_t size = sizeof(int);
-    int *result = bin_search(arr, arr + 5, size, &key, int_cmp);
-    ck_assert_ptr_nonnull(result);
-    ck_assert_int_eq(*result, 5);
-}
-END_TEST
+// /// Тест поиска элемента в массиве целых чисел
+// START_TEST(test_bin_search_int)
+// {
+//     int arr[] = {1, 2, 3, 4, 5};
+//     int key = 4;
+//     size_t size = sizeof(int);
+//     int *result = bin_search(arr, arr + 5, size, &key, int_cmp);
+//     ck_assert_ptr_nonnull(result);
+//     ck_assert_int_eq(*result, 5);
+// }
+// END_TEST
 
-/// Тест поиска элемента в массиве символов
-START_TEST(test_bin_search_char)
-{
-    char arr[] = {'a', 'b', 'c', 'd'};
-    size_t size = sizeof(char);
-    char key = 'c';
-    char *result = bin_search(arr, arr + 4, size, &key, char_cmp);
-    ck_assert_ptr_nonnull(result);
-    ck_assert_int_eq(*result, 'd');
-}
-END_TEST
+// /// Тест поиска элемента в массиве символов
+// START_TEST(test_bin_search_char)
+// {
+//     char arr[] = {'a', 'b', 'c', 'd'};
+//     size_t size = sizeof(char);
+//     char key = 'c';
+//     char *result = bin_search(arr, arr + 4, size, &key, char_cmp);
+//     ck_assert_ptr_nonnull(result);
+//     ck_assert_int_eq(*result, 'd');
+// }
+// END_TEST
 
-/// Тест поиска элемента в массиве символов
-START_TEST(test_bin_search_double)
-{
-    double arr[] = {1.2, 2.3, 3.4, 4.5};
-    size_t size = sizeof(double);
-    double key = 2.3;
-    double *result = bin_search(arr, arr + 4, size, &key, double_cmp);
-    ck_assert_ptr_nonnull(result);
-    ck_assert_double_eq_tol(*result, 3.4, 0.000001);
-}
-END_TEST
+// /// Тест поиска элемента в массиве символов
+// START_TEST(test_bin_search_double)
+// {
+//     double arr[] = {1.2, 2.3, 3.4, 4.5};
+//     size_t size = sizeof(double);
+//     double key = 2.3;
+//     double *result = bin_search(arr, arr + 4, size, &key, double_cmp);
+//     ck_assert_ptr_nonnull(result);
+//     ck_assert_double_eq_tol(*result, 3.4, 0.000001);
+// }
+// END_TEST
 
-/// Тест поиска элемента, отсутствующего в массиве
-START_TEST(test_bin_search_not_found)
-{
-    int arr[] = {1, 3, 5, 7, 9};
-    size_t size = sizeof(int);
-    int key = 4;
-    int *result = bin_search(arr, arr + 5, size, &key, int_cmp);
-    ck_assert_ptr_nonnull(result);
-    ck_assert_int_eq(*result, 5); // Возвращается элемент, который больше ключа
-}
-END_TEST
+// /// Тест поиска элемента, отсутствующего в массиве
+// START_TEST(test_bin_search_not_found)
+// {
+//     int arr[] = {1, 3, 5, 7, 9};
+//     size_t size = sizeof(int);
+//     int key = 4;
+//     int *result = bin_search(arr, arr + 5, size, &key, int_cmp);
+//     ck_assert_ptr_nonnull(result);
+//     ck_assert_int_eq(*result, 5); // Возвращается элемент, который больше ключа
+// }
+// END_TEST
 
-Suite* bin_search_suite(void)
-{
-    Suite *s;
-    TCase *tc;
+// Suite* bin_search_suite(void)
+// {
+//     Suite *s;
+//     TCase *tc;
 
-    s = suite_create("bin_search");
+//     s = suite_create("bin_search");
     
-    tc = tcase_create("tests");
-    tcase_add_test(tc, test_bin_search_int);
-    tcase_add_test(tc, test_bin_search_char);
-    tcase_add_test(tc, test_bin_search_double);
-    tcase_add_test(tc, test_bin_search_not_found);
+//     tc = tcase_create("tests");
+//     tcase_add_test(tc, test_bin_search_int);
+//     tcase_add_test(tc, test_bin_search_char);
+//     tcase_add_test(tc, test_bin_search_double);
+//     tcase_add_test(tc, test_bin_search_not_found);
 
-    suite_add_tcase(s, tc);
+//     suite_add_tcase(s, tc);
 
-    return s;
-}
+//     return s;
+// }

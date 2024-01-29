@@ -1,0 +1,1 @@
+./func_tests/data/neg_07_in1.txt ./out/tmp i no ./func_tests/data/neg_07_in2.txt

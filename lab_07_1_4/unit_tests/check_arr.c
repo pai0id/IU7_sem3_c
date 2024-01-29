@@ -3,6 +3,12 @@
 #include <stdio.h>
 #include "arr.h"
 
+void check_arr_eq(int *arr1, int *arr2, size_t size)
+{
+    for (size_t i = 0; i < size; ++i)
+        ck_assert_int_eq(arr1[i], arr2[i]);
+}
+
 /// Нормальный входной файл
 START_TEST(test_cnt_elements_normal)
 {
@@ -81,13 +87,15 @@ START_TEST(test_read_arr_normal)
     fprintf(f, "1 2 3 4 5 ");
     fclose(f);
     f = fopen("./out/tmp", "r");
+    int res[] = {1, 2, 3, 4, 5};
 
     int *arr = malloc(100 * sizeof(int));
     int *pb = arr, *pe;
 
     read_arr(f, &pb, &pe);
 
-    ck_assert_int_eq(pe - pb, 5);
+    check_arr_eq(res, pb, sizeof(res)/sizeof(res[0]));
+    _ck_assert_ptr(pe, ==, pb + sizeof(res)/sizeof(res[0]));
 
     fclose(f);
     free(arr);
@@ -182,8 +190,7 @@ START_TEST(test_get_arr_one_number)
     ck_assert_int_eq(result, OK);
     ck_assert_ptr_nonnull(pb);
     ck_assert_ptr_nonnull(pe);
-    for (int i = 0; i < pe - pb; ++i)
-        ck_assert_int_eq(*(pb + i), expected[i]);
+    check_arr_eq(pb, expected, pe - pb);
 
     free(pb);
 }
@@ -204,8 +211,7 @@ START_TEST(test_get_arr_many_numbers)
     ck_assert_int_eq(result, OK);
     ck_assert_ptr_nonnull(pb);
     ck_assert_ptr_nonnull(pe);
-    for (int i = 0; i < pe - pb; ++i)
-        ck_assert_int_eq(*(pb + i), expected[i]);
+    check_arr_eq(pb, expected, pe - pb);
 
     free(pb);
 }
@@ -298,8 +304,7 @@ START_TEST(test_print_arr_many_elements)
      &values[0], &values[1], &values[2], &values[3], &values[4]);
 
     ck_assert_int_eq(read_count, 5);
-    for (int i = 0; i < 5; ++i)
-        ck_assert_int_eq(values[i], arr[i]);
+    check_arr_eq(values, arr, 5);
     fclose(f);
 }
 END_TEST
